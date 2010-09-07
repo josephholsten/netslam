@@ -1,0 +1,76 @@
+Main:
+    Locate venue
+    If venue is known
+        Enter augment mode
+    Else
+        Enter explore mode
+
+Locate venue:
+    Find all venues in GPS area
+    Take N seconds of video
+    Perform binary search over frames:
+        Optimize for frames with highest number of SURF features
+    Take SURF features from best frame
+    For possible venues
+        Get bayesian likelihood based on SURF features
+    Order venues by likelihood and user's history
+    If most likely venue is outlier
+        Assume it is correct, or ask user to confirm
+    Else
+        Present user list of venues, in order of likelihood
+
+Augment Mode:
+    Download highest-quality landmarks
+    Localize camera
+    Loop
+        If venue has changed
+            Re-enter main
+        Capture augment frame
+        Process augment frame
+        Add augments to frame
+        Display frame
+    On exit
+        Upload observations and pose
+
+Download highest-quality landmarks:
+    For each local map:
+        Take N landmarks with highest hit/miss ratio
+    Collect all N landmarks for each M maps
+    Return unique best-guess landmark positions
+
+Localize Camera:
+    Frame = venue-locating frame,
+    Extract SURF features from frame
+    Locate match on server
+    If match
+        Initialize pose and return
+    Else
+        Repeat with frame taken from camera
+
+Process augment frame:
+    Prediction
+    Observation
+    Update
+
+Prediction:
+    Apply dynamic model to pose to get prior
+    Choose landmarks to attempt to observe
+    Project landmarks with their uncertainty
+    Warp landmark patches based on pose
+
+Choose landmarks to attempt to observe:
+    Use nearby landmarks visible in frustum
+    Choose top N (>= 4) with highest hit/miss ratio
+    Hit/miss ratio is weighted from server to local,
+      such that local quickly becomes more important
+
+Observation:
+    Scan uncertainty ellipses for warped patches using ZNCC
+    Record hits/misses
+    If hits < MIN (= 4)
+        Repeat Predict/Observe for remaining
+    Record accel / gyro / etc
+
+Update:
+    Apply EKF
+    record new pose and uncertainty

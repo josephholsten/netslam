@@ -1,0 +1,30 @@
+Cross-compiling is one of the many joys of iPhone development.  Generally cross compiling is as easy as calling a `configure’ script with the correct parameters:
+
+In our case for putting OpenCV on the iPhone, we used the following command:
+
+
+# build arm version
+echo "Building iPhoneOS arm version of the OpenCV framework"
+echo "============================================="
+if test -d ../build_iphoneos; then cd ../build_iphoneos; fi
+./configure \
+--host="arm-apple-darwin9" --target=arm-apple-darwin9 \
+--without-python --without-gtk --without-swig --disable-app \
+--enable-static \
+--disable-shared \
+CC=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc-4.0 \
+CPP=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/cpp \
+CXXCPP=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/cpp \
+CXX=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc-4.0\
+AR=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/ar \
+RANLIB=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/ranlib \
+NM=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/nm \
+CFLAGS="-arch armv6 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -fmessage-length=0 -fvisibility=hidden -miphoneos-version-min=2.0 -gdwarf-2 -mthumb -miphoneos-version-min=2.0 -I/Library/iPhone/include -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS2.2.sdk" \
+LDFLAGS="-arch armv6 -pipe -std=c99 -gdwarf-2 -mthumb -I/Library/iPhone/include -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS2.0.sdk" \
+CXXFLAGS="-arch armv6 -pipe -std=c99 -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -fmessage-length=0 -fvisibility=hidden -miphoneos-version-min=2.0 -gdwarf-2 -mthumb -miphoneos-version-min=2.0 -I/Library/iPhone/include -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS2.2.sdk"
+
+the CC, CPP, CXX, CXXCPP, AR, RANLIB, and NM arguments specify the executable files in charge of (CC) compiling C, (CPP) preprocessing C, (CXX & CXXCPP) the same for C++, (AR, RANLIB, NM) library related minutae.  A lot of the CFLAGS LDFLAGS CXXFLAGS are redundant or unnecessary, but they work so why not?
+
+The host= and target= options control cross-compilation.  You really only need to set HOST, which is the machine type on which the compiled code will run.  In our case it is arm-apple-darwin9 which is the machine type of the iPhone.  We gathered a lot of these arguments by building something in XCode and looking at the exact arguments to the C compiler. (You can observe those in the same window as the error messages.)
+
+The C family of programming languages has dumbed down our lives a great deal lately.  Cross-compiling is an even dumber phenomenon than the ins and outs of normal iPhone programming.  Hopefully this post will help bring the joys of cross-compiling into your own living room.  If you find this helpful, please comment on what library you have successfully put on the phone.  If anyone wants OpenCV, let us know.
