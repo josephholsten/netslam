@@ -1,0 +1,37 @@
+OpenCV:
+  - Features
+    - SURF, Hough, Haar, Flow
+    - Warping, Searching
+  - Filters
+    - Kalman
+    - Condensation
+  - Utilities
+    - Drawing
+    - Convex Hull
+    - Contours
+    - k-Means
+  - Camera
+    - Calibration
+    - Projection
+    - Distortion
+  - Video
+    - Capture
+    - Read/Write
+    - Display
+
+libCVD:
+  - Video
+    - Read/Write
+    - Capture
+  - Camera
+    - Calibration
+    - Distortion
+    - Display
+  - Features
+    - FAST, Harris, Shi-Tomasi
+    - Warping
+  - Utilities
+    - Drawing
+    - Lie Math
+    - Least-squares
+    - Convolutions
